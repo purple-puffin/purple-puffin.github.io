@@ -51,6 +51,10 @@ const invoiceForm = createSlice({
       const item = state.items.find((x) => x.productID === productID)!;
       item.discountAmount = discountAmount;
     },
+    clearItemDiscountAmount(state, { payload: productID }: PayloadAction<string>) {
+      const item = state.items.find((x) => x.productID === productID)!;
+      delete item.discountAmount;
+    },
     setItemQuantity(state, { payload: { index, quantity } }: SetItemQuantityAction) {
       state.items[index].quantity = quantity;
     },
@@ -81,6 +85,7 @@ export const {
   setDiscount,
   addProduct,
   setItemDiscountAmount,
+  clearItemDiscountAmount,
   setItemQuantity,
   selectItem,
   deselectItem,
