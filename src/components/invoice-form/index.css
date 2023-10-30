@@ -1,0 +1,52 @@
+.invoice-form {
+  width: 100%;
+  padding: 0.5rem;
+}
+
+.invoice-form .custom-table {
+  margin: 0 -0.5rem 0.5rem -0.5rem;
+}
+
+.invoice-form .custom-table__header {
+  margin: 0 -0.5rem;
+}
+
+.invoice-form.ui.form .field,
+.invoice-form.ui.form .fields {
+  margin-bottom: 0.5rem;
+}
+
+.invoice-form.ui.form .fields .field {
+  margin-bottom: 0;
+}
+
+.invoice-form.ui.form .field:last-child,
+.invoice-form.ui.form .fields:last-child {
+  margin-bottom: 0;
+}
+
+.invoice-form.ui.form .fields {
+  margin-left: -0.25rem;
+  margin-right: -0.25rem;
+}
+
+.invoice-form.ui.form .fields .wide.field {
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
+}
+
+.action-dropdown-wrapper {
+  display: flex;
+}
+
+.action-dropdown-wrapper > .ui.dropdown {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-right-color: transparent;
+}
+
+.action-dropdown-wrapper > .ui.button {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  margin: 0;
+}
