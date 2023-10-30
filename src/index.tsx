@@ -9,6 +9,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import './index.css';
 import store from './store';
+import { register as registerSW } from './service-worker-registration';
 
 import Header from './components/header';
 import MainPage from './pages/main-page';
@@ -35,3 +36,5 @@ root.render(
     </Provider>
   </React.StrictMode>
 );
+
+registerSW();
