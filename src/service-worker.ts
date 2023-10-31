@@ -8,3 +8,4 @@ declare const self: ServiceWorkerGlobalScope;
 
 clientsClaim();
 precacheAndRoute(self.__WB_MANIFEST);
+self.addEventListener('install', () => { self.skipWaiting(); });
