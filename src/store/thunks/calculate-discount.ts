@@ -5,19 +5,18 @@ import { setItemDiscountAmount, clearItemDiscountAmount } from '../slices/invoic
 
 const calculateDiscountThunk = (productID: string): AppThunk => (dispatch, getState) => {
   const { invoiceForm: { currency, discount, items }, products } = getState();
+  const index = items.findIndex(x => x.productID === productID);
 
   const discountValue = new Big(discount || 0);
   if (discountValue.eq(0)) {
-    dispatch(clearItemDiscountAmount(productID));
-    return
+    dispatch(clearItemDiscountAmount(index));
+    return;
   }
 
-  const product = products[productID];
-  const item = items.find((x) => x.productID === productID)!;
-  const totalAmount = new Big(product.price[currency]).times(item.quantity || 0);
+  const totalAmount = new Big(products[productID].price[currency]).times(items[index].quantity || 0);
   const discountAmount = totalAmount.times(discountValue).div(100);
 
-  dispatch(setItemDiscountAmount({ productID, discountAmount: discountAmount.toFixed(2) }));
+  dispatch(setItemDiscountAmount({ index, discountAmount: discountAmount.toFixed(2) }));
 };
 
 export default calculateDiscountThunk;

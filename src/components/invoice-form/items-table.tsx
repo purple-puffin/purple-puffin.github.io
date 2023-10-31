@@ -5,7 +5,7 @@ import { FixedSizeList } from 'react-window';
 import Big from 'big.js';
 
 import { useAppDispatch, useAppSelector } from '../../store';
-import { setItemQuantity, selectItem, deselectItem } from '../../store/slices/invoice-form';
+import { setItemQuantity, setItemDiscountAmount, selectItem, deselectItem } from '../../store/slices/invoice-form';
 import { calculateDiscountThunk } from '../../store/thunks';
 import { currencyFormatters } from '../../models/currency';
 import Table, { Header as TableHeader, Row as TableRow, HeaderProps, RowProps } from '../table';
@@ -18,7 +18,6 @@ const columnStyle: CSSProperties[] = [
   { flex: '0 0 9rem', textAlign: 'right' },
   { flex: '0 0 9rem', textAlign: 'right' },
 ];
-
 
 const ItemHeader = ({ style }: HeaderProps) => (
   <TableHeader style={style}>
@@ -39,13 +38,16 @@ const ItemRow = ({ index, style }: RowProps) => {
   const item = useAppSelector(s => s.invoiceForm.items[index], shallowEqual);
   const product = useAppSelector(s => s.products[item.productID], shallowEqual);
   const price = new Big(product.price[currency]);
-  const discountAmount = item.discountAmount && new Big(item.discountAmount);
-  const totalAmount = price.times(item.quantity || 0).minus(discountAmount || 0);
+  const totalAmount = price.times(item.quantity || 0).minus(item.discountAmount || 0);
 
   const onQuantityChange: InputProps['onChange'] = (_, { value }) => {
     dispatch(setItemQuantity({ index, quantity: value }));
     dispatch(calculateDiscountThunk(product.id));
   };
+
+  const onDiscountAmountChange: InputProps['onChange'] = (_, { value }) => {
+    dispatch(setItemDiscountAmount({ index, discountAmount: value }));
+  }
 
   const onRowClick = active ? () => dispatch(deselectItem()) : () => dispatch(selectItem(index));
 
@@ -64,7 +66,8 @@ const ItemRow = ({ index, style }: RowProps) => {
       {currencyFormatters[currency].format(price.round(2).toNumber())}
     </div>
     <div style={columnStyle[4]}>
-      {discountAmount ? currencyFormatters[currency].format(discountAmount.round(2).toNumber()) : '-'}
+      <Input transparent fluid type='number' min='0' step='0.01' disabled={disabled}
+        value={item.discountAmount || ''} onChange={onDiscountAmountChange} />
     </div>
     <div style={columnStyle[5]}>
       {currencyFormatters[currency].format(totalAmount.round(2).toNumber())}

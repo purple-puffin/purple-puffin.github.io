@@ -16,7 +16,7 @@ const initialState: State = {
   items: [],
 };
 
-type SetItemDiscountAmountAction = PayloadAction<{ productID: string; discountAmount: string; }>;
+type SetItemDiscountAmountAction = PayloadAction<{ index: number; discountAmount: string; }>;
 type SetItemQuantityAction = PayloadAction<{ index: number; quantity: string; }>;
 
 const invoiceForm = createSlice({
@@ -40,19 +40,18 @@ const invoiceForm = createSlice({
       state.discount = action.payload;
     },
     addProduct(state, { payload: productID }: PayloadAction<string>) {
-      const item = state.items.find((x) => x.productID === productID);
+      const item = state.items.find(x => x.productID === productID);
       if (item) {
         item.quantity = (Number(item.quantity) + 1).toFixed(0);
       } else {
         state.items.push({ productID: productID, quantity: '1' });
       }
     },
-    setItemDiscountAmount(state, { payload: { productID, discountAmount } }: SetItemDiscountAmountAction) {
-      const item = state.items.find((x) => x.productID === productID)!;
-      item.discountAmount = discountAmount;
+    setItemDiscountAmount(state, { payload: { index, discountAmount } }: SetItemDiscountAmountAction) {
+      state.items[index].discountAmount = discountAmount;
     },
-    clearItemDiscountAmount(state, { payload: productID }: PayloadAction<string>) {
-      const item = state.items.find((x) => x.productID === productID)!;
+    clearItemDiscountAmount(state, { payload: index }: PayloadAction<number>) {
+      const item = state.items[index];
       delete item.discountAmount;
     },
     setItemQuantity(state, { payload: { index, quantity } }: SetItemQuantityAction) {
