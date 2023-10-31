@@ -35,6 +35,7 @@ const InvoiceForm = ({ height }: InvoiceFormProps) => {
   const onCurrencyChange: DropdownProps['onChange'] = (_, { value }) => {
     dispatch(setCurrency(value as Currency));
     dispatch(recalculateDiscountThunk);
+    toast.info('Знижка перерахована');
   };
 
   const customerID = useAppSelector(s => s.invoiceForm.customerID);
