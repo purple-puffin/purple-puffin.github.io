@@ -13,10 +13,10 @@ import Table, { Header as TableHeader, Row as TableRow, HeaderProps, RowProps } 
 const columnStyle: CSSProperties[] = [
   { flex: '0 0 2.5rem', textAlign: 'right' },
   { flex: '1' },
-  { flex: '0 0 3.5rem', textAlign: 'right' },
-  { flex: '0 0   9rem', textAlign: 'right' },
-  { flex: '0 0   9rem', textAlign: 'right' },
-  { flex: '0 0   9rem', textAlign: 'right' },
+  { flex: '0 0 5rem', textAlign: 'right' },
+  { flex: '0 0 9rem', textAlign: 'right' },
+  { flex: '0 0 9rem', textAlign: 'right' },
+  { flex: '0 0 9rem', textAlign: 'right' },
 ];
 
 
