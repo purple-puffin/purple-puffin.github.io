@@ -29,6 +29,7 @@
 
 .custom-table__header .ui.breadcrumb {
   font-weight: normal;
+  vertical-align: baseline;
 }
 
 .custom-table__item {
