@@ -13,24 +13,34 @@ const fakeProduct = (): Product => {
     name: faker.commerce.productName(),
     price: { USD: price, UAH: new Big(price).mul(36.5686).toString() },
     stock: faker.number.int({ min: 0, max: 100 }),
+    path: [],
   };
 };
 
 export const products = buildArray(fakeProduct, 500);
 let productIdx = 0;
 
-const nextProduct = (): Product => products[productIdx++];
+const nextProduct = (path: string[]): Product => {
+  const product = products[productIdx++];
+  product.path = path;
+  return product;
+};
 
-const fakeGroup = (groupsCount: number, productsCount: number): Group => ({
-  name: faker.commerce.department(),
-  productIDs: buildArray(() => nextProduct().id, productsCount),
-  groups: buildArray(() => fakeGroup(groupsCount - 1, productsCount), groupsCount),
-});
+const fakeGroup = (groupsCount: number, productsCount: number, path: string[]): Group => {
+  const name = faker.commerce.department();
+  const nextPath = [...path, name];
+
+  return ({
+    name,
+    productIDs: buildArray(() => nextProduct(nextPath).id, productsCount),
+    groups: buildArray(() => fakeGroup(groupsCount - 1, productsCount, nextPath), groupsCount),
+  })
+};
 
 export const directory: Group = {
   name: '',
-  groups: buildArray(() => fakeGroup(3, 5), 5),
-  productIDs: buildArray(() => nextProduct().id, products.length - productIdx),
+  groups: buildArray(() => fakeGroup(3, 5, []), 5),
+  productIDs: buildArray(() => nextProduct([]).id, products.length - productIdx),
 };
 
 const fakeCustomer = (): Customer => ({

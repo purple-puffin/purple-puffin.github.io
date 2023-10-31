@@ -14,16 +14,19 @@ export type RowProps = ListChildComponentProps;
 interface TableOwnProps {
   height: number;
   renderHeader: ComponentType<HeaderProps>;
+  renderStatus?: ComponentType<HeaderProps>;
+  status?: true;
 }
 
 type TableProps = TableOwnProps & Pick<BodyProps, 'itemCount' | 'renderRow'>;
 
-const Table = ({ height, renderHeader: Header, ...props }: TableProps, ref: Ref<FixedSizeList>) => {
+const Table = ({ height, renderHeader: Header, renderStatus: Status, ...props }: TableProps, ref: Ref<FixedSizeList>) => {
   const [headerPadding, setHeaderPadding] = useState(0);
 
   return <>
     <Header style={{ paddingRight: headerPadding }} />
     <Body ref={ref} height={height - 37} {...props} onScrollbarOffsetChange={setHeaderPadding} />
+    {Status && <Status style={{ paddingRight: headerPadding }} />}
   </>;
 };
 

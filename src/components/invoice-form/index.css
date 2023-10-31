@@ -4,11 +4,15 @@
 }
 
 .invoice-form .custom-table {
-  margin: 0 -0.5rem 0.5rem -0.5rem;
+  margin: 0 -0.5rem;
 }
 
 .invoice-form .custom-table__header {
   margin: 0 -0.5rem;
+}
+
+.invoice-form .custom-table + .custom-table__header {
+  margin-bottom: 0.5rem;
 }
 
 .invoice-form.ui.form .field,

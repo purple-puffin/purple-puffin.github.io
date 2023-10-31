@@ -5,4 +5,5 @@ export default interface Product {
   name: string;
   price: Record<Currency, string>;
   stock: number;
+  path: string[];
 }

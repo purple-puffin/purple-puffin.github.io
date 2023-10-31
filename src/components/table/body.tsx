@@ -1,14 +1,16 @@
 import { Ref, useRef, useEffect, forwardRef } from 'react';
 import { FixedSizeList, FixedSizeListProps } from 'react-window';
+import classNames from 'classnames';
 
 export interface BodyProps {
   height: number;
   itemCount: number;
   renderRow: FixedSizeListProps['children'];
   onScrollbarOffsetChange: (offset: number) => void;
+  status?: true;
 }
 
-const Body = ({ height, itemCount, renderRow, onScrollbarOffsetChange }: BodyProps, ref: Ref<FixedSizeList>) => {
+const Body = ({ height, itemCount, renderRow, status, onScrollbarOffsetChange }: BodyProps, ref: Ref<FixedSizeList>) => {
   const outerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -31,7 +33,7 @@ const Body = ({ height, itemCount, renderRow, onScrollbarOffsetChange }: BodyPro
     itemCount={itemCount}
     itemSize={40}
     overscanCount={5}
-    className='custom-table'
+    className={classNames('custom-table', { 'custom-table__with-status': status })}
     children={renderRow}
   />;
 };

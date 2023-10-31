@@ -19,6 +19,13 @@ const columnStyle: CSSProperties[] = [
   { flex: '0 0 9rem', textAlign: 'right' },
 ];
 
+const statusColumnStyle: CSSProperties[] = [
+  { flex: '1' },
+  { flex: '0 0 9rem', textAlign: 'right' },
+  { flex: '0 0 9rem', textAlign: 'right' },
+  { flex: '0 0 9rem', textAlign: 'right' },
+];
+
 const ItemHeader = ({ style }: HeaderProps) => (
   <TableHeader style={style}>
     <div style={columnStyle[0]}>№</div>
@@ -47,7 +54,7 @@ const ItemRow = ({ index, style }: RowProps) => {
 
   const onDiscountAmountChange: InputProps['onChange'] = (_, { value }) => {
     dispatch(setItemDiscountAmount({ index, discountAmount: value }));
-  }
+  };
 
   const onRowClick = active ? () => dispatch(deselectItem()) : () => dispatch(selectItem(index));
 
@@ -75,6 +82,49 @@ const ItemRow = ({ index, style }: RowProps) => {
   </TableRow>;
 };
 
+const StatusRow = ({ style }: HeaderProps) => {
+  const invoice = useAppSelector(s => s.invoiceForm, shallowEqual);
+  const products = useAppSelector(s => s.products, shallowEqual);
+
+  let path: string[] = [];
+  if (typeof invoice.selectedItemIndex !== 'undefined') {
+    const item = invoice.items[invoice.selectedItemIndex];
+    if (item) {
+      path = products[item.productID].path;
+    }
+  }
+
+  const totalPrice = invoice.items.reduce((acc, item) => {
+    return acc.plus(products[item.productID].price[invoice.currency]);
+  }, new Big(0));
+
+  const totalDiscount = invoice.items.reduce((acc, item) => {
+    return acc.plus(item.discountAmount || 0);
+  }, new Big(0));
+
+  const totalAmount = invoice.items.reduce((acc, item) => {
+    const price = products[item.productID].price[invoice.currency];
+    return acc.plus(price).times(item.quantity || 0).minus(item.discountAmount || 0);
+  }, new Big(0));
+
+  return (
+    <TableHeader style={style}>
+      <div style={statusColumnStyle[0]}>
+        /{path.join('/')}
+      </div>
+      <div style={statusColumnStyle[1]}>
+        {currencyFormatters[invoice.currency].format(totalPrice.round(2).toNumber())}
+      </div>
+      <div style={statusColumnStyle[2]}>
+        {currencyFormatters[invoice.currency].format(totalDiscount.round(2).toNumber())}
+      </div>
+      <div style={statusColumnStyle[3]}>
+        {currencyFormatters[invoice.currency].format(totalAmount.round(2).toNumber())}
+      </div>
+    </TableHeader>
+  );
+};
+
 interface ItemsTableProps {
   height: number;
 }
@@ -82,7 +132,8 @@ interface ItemsTableProps {
 const ItemsTable = ({ height }: ItemsTableProps, ref: Ref<FixedSizeList>) => {
   const itemCount = useAppSelector(s => s.invoiceForm.items.length);
 
-  return <Table ref={ref} height={height} itemCount={itemCount} renderHeader={ItemHeader} renderRow={ItemRow} />;
+  return <Table ref={ref} status height={height - 37} itemCount={itemCount}
+    renderHeader={ItemHeader} renderRow={ItemRow} renderStatus={StatusRow} />;
 };
 
 export default forwardRef(ItemsTable);
