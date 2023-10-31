@@ -57,7 +57,7 @@ const ItemRow = ({ index, style }: RowProps) => {
       {product.name}
     </div>
     <div style={columnStyle[2]}>
-      <Input transparent fluid type='number' min='1' step='1' disabled={disabled}
+      <Input transparent fluid type='number' min='1' step='1' required disabled={disabled}
         value={item.quantity} onChange={onQuantityChange} />
     </div>
     <div style={columnStyle[3]}>
